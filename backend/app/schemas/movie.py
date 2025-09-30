@@ -11,17 +11,21 @@ class MovieBase(BaseModel):
     release_year: int = Field(ge=1888, le=2100, description="Year movie was released")
     synopsis: Optional[str] = None
     poster_url: Optional[str] = Field(None, max_length=500, description="URL to movie poster image")
-    duration_minutes: Optional[int] = Field(None, ge=1, le=600, description="Movie duration in minutes")
-    status: Optional[str] = Field("Released", max_length=50, description="Movie status (Released, Coming Soon, etc.)")
+    duration_minutes: Optional[int] = Field(
+        None, ge=1, le=600, description="Movie duration in minutes"
+    )
+    status: Optional[str] = Field(
+        "Released", max_length=50, description="Movie status (Released, Coming Soon, etc.)"
+    )
     director_id: int = Field(gt=0)
 
-    @field_validator('release_year')
+    @field_validator("release_year")
     @classmethod
     def validate_year(cls, v):
         if v < 1888:  # First motion picture
-            raise ValueError('Release year cannot be before 1888')
+            raise ValueError("Release year cannot be before 1888")
         if v > 2100:
-            raise ValueError('Release year cannot be after 2100')
+            raise ValueError("Release year cannot be after 2100")
         return v
 
 
@@ -50,6 +54,7 @@ class Movie(MovieBase):
 
 class MovieDetail(Movie):
     """Movie with all relationships and computed fields."""
+
     director: Director
     genres: List[Genre] = []
     actors: List[Actor] = []

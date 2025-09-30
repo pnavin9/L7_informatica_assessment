@@ -1,10 +1,14 @@
 """Genre API endpoints."""
+
 from typing import List, Optional
+
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session
+
 from app.api.deps import get_db
 from app.models import Genre
-from app.schemas import Genre as GenreSchema, GenreCreate, GenreUpdate
+from app.schemas import GenreCreate, GenreUpdate
+from app.schemas import Genre as GenreSchema
 
 router = APIRouter()
 
@@ -12,14 +16,14 @@ router = APIRouter()
 @router.get("/", response_model=List[GenreSchema])
 def get_genres(
     search: Optional[str] = Query(None, description="Search in genre name"),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ) -> List[GenreSchema]:
     """Get list of all genres."""
     query = db.query(Genre)
-    
+
     if search:
         query = query.filter(Genre.name.ilike(f"%{search}%"))
-    
+
     genres = query.all()
     return [GenreSchema.model_validate(genre) for genre in genres]
 
@@ -28,10 +32,10 @@ def get_genres(
 def get_genre(genre_id: int, db: Session = Depends(get_db)) -> GenreSchema:
     """Get a specific genre by ID."""
     genre = db.query(Genre).filter(Genre.id == genre_id).first()
-    
+
     if not genre:
         raise HTTPException(status_code=404, detail="Genre not found")
-    
+
     return genre
 
 
@@ -42,7 +46,7 @@ def create_genre(genre_data: GenreCreate, db: Session = Depends(get_db)) -> Genr
     existing = db.query(Genre).filter(Genre.name == genre_data.name).first()
     if existing:
         raise HTTPException(status_code=400, detail="Genre already exists")
-    
+
     genre = Genre(**genre_data.model_dump())
     db.add(genre)
     db.commit()
@@ -51,16 +55,18 @@ def create_genre(genre_data: GenreCreate, db: Session = Depends(get_db)) -> Genr
 
 
 @router.put("/{genre_id}", response_model=GenreSchema)
-def update_genre(genre_id: int, genre_data: GenreUpdate, db: Session = Depends(get_db)) -> GenreSchema:
+def update_genre(
+    genre_id: int, genre_data: GenreUpdate, db: Session = Depends(get_db)
+) -> GenreSchema:
     """Update an existing genre."""
     genre = db.query(Genre).filter(Genre.id == genre_id).first()
     if not genre:
         raise HTTPException(status_code=404, detail="Genre not found")
-    
+
     update_data = genre_data.model_dump(exclude_unset=True)
     for field, value in update_data.items():
         setattr(genre, field, value)
-    
+
     db.commit()
     db.refresh(genre)
     return genre
@@ -72,7 +78,7 @@ def delete_genre(genre_id: int, db: Session = Depends(get_db)) -> None:
     genre = db.query(Genre).filter(Genre.id == genre_id).first()
     if not genre:
         raise HTTPException(status_code=404, detail="Genre not found")
-    
+
     db.delete(genre)
     db.commit()
     return None
