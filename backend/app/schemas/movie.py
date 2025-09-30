@@ -58,7 +58,6 @@ class MovieDetail(Movie):
     model_config = ConfigDict(from_attributes=True)
 
     @computed_field
-    @property
     def average_rating(self) -> Optional[float]:
         """Calculate average rating from all ratings."""
         if not self.ratings:
@@ -67,7 +66,6 @@ class MovieDetail(Movie):
         return round(avg, 1)
 
     @computed_field
-    @property
     def rating_count(self) -> int:
         """Get total number of ratings."""
         return len(self.ratings)

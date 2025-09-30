@@ -1,8 +1,9 @@
+from typing import Dict, List, Any
 from sqlalchemy.orm import Session
 from app.models import Movie, Actor, Director, Genre, Rating
 
 
-def seed_database(db: Session):
+def seed_database(db: Session) -> None:
     """Populate database with sample movie data."""
     
     # Check if data already exists
