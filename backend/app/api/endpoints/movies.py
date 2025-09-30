@@ -16,10 +16,12 @@ router = APIRouter()
 
 def apply_movie_filters(query: SQLQuery, **filters: Any) -> SQLQuery:
     """Apply filters to movie query in a clean way."""
-    # Define filter mappings
     filter_mappings = [
         ("genre", lambda q, v: q.join(Movie.genres).filter(Genre.name.ilike(f"%{v}%"))),
-        ("director", lambda q, v: q.join(Movie.director).filter(Director.name.ilike(f"%{v}%"))),
+        (
+            "director",
+            lambda q, v: q.join(Movie.director).filter(Director.name.ilike(f"%{v}%")),
+        ),
         ("actor", lambda q, v: q.join(Movie.actors).filter(Actor.name.ilike(f"%{v}%"))),
         ("year", lambda q, v: q.filter(Movie.release_year == v)),
         ("min_year", lambda q, v: q.filter(Movie.release_year >= v)),
@@ -28,7 +30,6 @@ def apply_movie_filters(query: SQLQuery, **filters: Any) -> SQLQuery:
         ("search", lambda q, v: q.filter(Movie.title.ilike(f"%{v}%"))),
     ]
 
-    # Apply filters that have values
     for filter_name, filter_func in filter_mappings:
         if filters.get(filter_name):
             query = filter_func(query, filters[filter_name])
@@ -114,27 +115,23 @@ def create_movie(movie_data: MovieCreate, db: Session = Depends(get_db)) -> Movi
         raise HTTPException(status_code=404, detail="Director not found")
 
     # Create movie
-    movie = Movie(
-        title=movie_data.title,
-        release_year=movie_data.release_year,
-        synopsis=movie_data.synopsis,
-        poster_url=movie_data.poster_url,
-        duration_minutes=movie_data.duration_minutes,
-        status=movie_data.status,
-        director_id=movie_data.director_id,
-    )
+    movie = Movie(**movie_data.model_dump(exclude={"genre_ids", "actor_ids"}))
+    db.add(movie)
+    db.commit()
+    db.refresh(movie)
 
     # Add genres
-    if movie_data.genre_ids:
-        genres = db.query(Genre).filter(Genre.id.in_(movie_data.genre_ids)).all()
-        movie.genres = genres
+    for genre_id in movie_data.genre_ids:
+        genre = db.query(Genre).filter(Genre.id == genre_id).first()
+        if genre:
+            movie.genres.append(genre)
 
     # Add actors
-    if movie_data.actor_ids:
-        actors = db.query(Actor).filter(Actor.id.in_(movie_data.actor_ids)).all()
-        movie.actors = actors
+    for actor_id in movie_data.actor_ids:
+        actor = db.query(Actor).filter(Actor.id == actor_id).first()
+        if actor:
+            movie.actors.append(actor)
 
-    db.add(movie)
     db.commit()
     db.refresh(movie)
 
@@ -150,26 +147,26 @@ def update_movie(
     if not movie:
         raise HTTPException(status_code=404, detail="Movie not found")
 
-    # Update fields
-    update_data = movie_data.model_dump(exclude_unset=True)
-
-    # Handle genres separately
-    if "genre_ids" in update_data:
-        genre_ids = update_data.pop("genre_ids")
-        if genre_ids is not None:
-            genres = db.query(Genre).filter(Genre.id.in_(genre_ids)).all()
-            movie.genres = genres
-
-    # Handle actors separately
-    if "actor_ids" in update_data:
-        actor_ids = update_data.pop("actor_ids")
-        if actor_ids is not None:
-            actors = db.query(Actor).filter(Actor.id.in_(actor_ids)).all()
-            movie.actors = actors
-
-    # Update remaining fields
+    # Update basic fields
+    update_data = movie_data.model_dump(exclude_unset=True, exclude={"genre_ids", "actor_ids"})
     for field, value in update_data.items():
         setattr(movie, field, value)
+
+    # Update genres if provided
+    if movie_data.genre_ids is not None:
+        movie.genres.clear()
+        for genre_id in movie_data.genre_ids:
+            genre = db.query(Genre).filter(Genre.id == genre_id).first()
+            if genre:
+                movie.genres.append(genre)
+
+    # Update actors if provided
+    if movie_data.actor_ids is not None:
+        movie.actors.clear()
+        for actor_id in movie_data.actor_ids:
+            actor = db.query(Actor).filter(Actor.id == actor_id).first()
+            if actor:
+                movie.actors.append(actor)
 
     db.commit()
     db.refresh(movie)
@@ -186,5 +183,3 @@ def delete_movie(movie_id: int, db: Session = Depends(get_db)) -> None:
 
     db.delete(movie)
     db.commit()
-
-    return None
