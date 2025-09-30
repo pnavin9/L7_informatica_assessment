@@ -27,7 +27,7 @@ app = FastAPI(
     description="RESTful API for exploring movies, actors, directors, and genres with comprehensive filtering",
     version="1.0.0",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
 )
 
 # Configure CORS
@@ -59,8 +59,8 @@ def root() -> Dict[str, Any]:
             "actors": "/api/actors",
             "directors": "/api/directors",
             "genres": "/api/genres",
-            "ratings": "/api/ratings"
-        }
+            "ratings": "/api/ratings",
+        },
     }
 
 

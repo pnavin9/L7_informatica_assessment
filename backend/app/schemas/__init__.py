@@ -10,9 +10,22 @@ DirectorDetail.model_rebuild()
 MovieDetail.model_rebuild()
 
 __all__ = [
-    "Movie", "MovieCreate", "MovieUpdate", "MovieDetail",
-    "Actor", "ActorCreate", "ActorUpdate", "ActorDetail",
-    "Director", "DirectorCreate", "DirectorUpdate", "DirectorDetail",
-    "Genre", "GenreCreate", "GenreUpdate",
-    "Rating", "RatingCreate", "RatingUpdate",
+    "Movie",
+    "MovieCreate",
+    "MovieUpdate",
+    "MovieDetail",
+    "Actor",
+    "ActorCreate",
+    "ActorUpdate",
+    "ActorDetail",
+    "Director",
+    "DirectorCreate",
+    "DirectorUpdate",
+    "DirectorDetail",
+    "Genre",
+    "GenreCreate",
+    "GenreUpdate",
+    "Rating",
+    "RatingCreate",
+    "RatingUpdate",
 ]
