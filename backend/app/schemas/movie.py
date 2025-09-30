@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, ConfigDict, field_validator
+from pydantic import BaseModel, Field, ConfigDict, field_validator, computed_field
 from typing import Optional, List
 from .genre import Genre
 from .actor import Actor
@@ -54,27 +54,20 @@ class MovieDetail(Movie):
     genres: List[Genre] = []
     actors: List[Actor] = []
     ratings: List[Rating] = []
-    average_rating: Optional[float] = None
-    rating_count: int = 0
 
     model_config = ConfigDict(from_attributes=True)
 
-    @classmethod
-    def from_orm_with_ratings(cls, movie_orm):
-        """Create MovieDetail from ORM model with computed rating fields."""
-        ratings = movie_orm.ratings
-        avg_rating = sum(r.score for r in ratings) / len(ratings) if ratings else None
-        
-        return cls(
-            id=movie_orm.id,
-            title=movie_orm.title,
-            release_year=movie_orm.release_year,
-            synopsis=movie_orm.synopsis,
-            director_id=movie_orm.director_id,
-            director=movie_orm.director,
-            genres=movie_orm.genres,
-            actors=movie_orm.actors,
-            ratings=ratings,
-            average_rating=round(avg_rating, 1) if avg_rating else None,
-            rating_count=len(ratings)
-        )
+    @computed_field
+    @property
+    def average_rating(self) -> Optional[float]:
+        """Calculate average rating from all ratings."""
+        if not self.ratings:
+            return None
+        avg = sum(r.score for r in self.ratings) / len(self.ratings)
+        return round(avg, 1)
+
+    @computed_field
+    @property
+    def rating_count(self) -> int:
+        """Get total number of ratings."""
+        return len(self.ratings)
