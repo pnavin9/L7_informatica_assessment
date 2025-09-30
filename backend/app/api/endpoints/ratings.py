@@ -10,18 +10,18 @@ router = APIRouter()
 
 
 @router.get("/movies/{movie_id}/ratings", response_model=List[RatingSchema])
-def get_movie_ratings(movie_id: int, db: Session = Depends(get_db)):
+def get_movie_ratings(movie_id: int, db: Session = Depends(get_db)) -> List[RatingSchema]:
     """Get all ratings for a specific movie."""
     movie = db.query(Movie).filter(Movie.id == movie_id).first()
     if not movie:
         raise HTTPException(status_code=404, detail="Movie not found")
     
     ratings = db.query(Rating).filter(Rating.movie_id == movie_id).all()
-    return ratings
+    return [RatingSchema.model_validate(rating) for rating in ratings]
 
 
 @router.post("/ratings", response_model=RatingSchema, status_code=201)
-def create_rating(rating_data: RatingCreate, db: Session = Depends(get_db)):
+def create_rating(rating_data: RatingCreate, db: Session = Depends(get_db)) -> RatingSchema:
     """Create a new rating for a movie."""
     # Verify movie exists
     movie = db.query(Movie).filter(Movie.id == rating_data.movie_id).first()
@@ -36,7 +36,7 @@ def create_rating(rating_data: RatingCreate, db: Session = Depends(get_db)):
 
 
 @router.put("/ratings/{rating_id}", response_model=RatingSchema)
-def update_rating(rating_id: int, rating_data: RatingUpdate, db: Session = Depends(get_db)):
+def update_rating(rating_id: int, rating_data: RatingUpdate, db: Session = Depends(get_db)) -> RatingSchema:
     """Update an existing rating."""
     rating = db.query(Rating).filter(Rating.id == rating_id).first()
     if not rating:
@@ -52,7 +52,7 @@ def update_rating(rating_id: int, rating_data: RatingUpdate, db: Session = Depen
 
 
 @router.delete("/ratings/{rating_id}", status_code=204)
-def delete_rating(rating_id: int, db: Session = Depends(get_db)):
+def delete_rating(rating_id: int, db: Session = Depends(get_db)) -> None:
     """Delete a rating."""
     rating = db.query(Rating).filter(Rating.id == rating_id).first()
     if not rating:

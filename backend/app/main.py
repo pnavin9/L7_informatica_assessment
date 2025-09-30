@@ -3,6 +3,7 @@ Main FastAPI application.
 
 Movie Explorer Platform - RESTful API with comprehensive filtering.
 """
+from typing import Dict, Any
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.db.database import init_db
@@ -47,7 +48,7 @@ app.include_router(ratings.router, prefix="/api", tags=["Ratings"])
 
 
 @app.get("/", tags=["Root"])
-def root():
+def root() -> Dict[str, Any]:
     """Root endpoint with API information."""
     return {
         "message": "Welcome to Movie Explorer API",
@@ -64,6 +65,6 @@ def root():
 
 
 @app.get("/health", tags=["Health"])
-def health_check():
+def health_check() -> Dict[str, str]:
     """Health check endpoint."""
     return {"status": "healthy"}

@@ -13,7 +13,7 @@ router = APIRouter()
 def get_genres(
     search: Optional[str] = Query(None, description="Search in genre name"),
     db: Session = Depends(get_db)
-):
+) -> List[GenreSchema]:
     """Get list of all genres."""
     query = db.query(Genre)
     
@@ -21,11 +21,11 @@ def get_genres(
         query = query.filter(Genre.name.ilike(f"%{search}%"))
     
     genres = query.all()
-    return genres
+    return [GenreSchema.model_validate(genre) for genre in genres]
 
 
 @router.get("/{genre_id}", response_model=GenreSchema)
-def get_genre(genre_id: int, db: Session = Depends(get_db)):
+def get_genre(genre_id: int, db: Session = Depends(get_db)) -> GenreSchema:
     """Get a specific genre by ID."""
     genre = db.query(Genre).filter(Genre.id == genre_id).first()
     
@@ -36,7 +36,7 @@ def get_genre(genre_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/", response_model=GenreSchema, status_code=201)
-def create_genre(genre_data: GenreCreate, db: Session = Depends(get_db)):
+def create_genre(genre_data: GenreCreate, db: Session = Depends(get_db)) -> GenreSchema:
     """Create a new genre."""
     # Check if genre already exists
     existing = db.query(Genre).filter(Genre.name == genre_data.name).first()
@@ -51,7 +51,7 @@ def create_genre(genre_data: GenreCreate, db: Session = Depends(get_db)):
 
 
 @router.put("/{genre_id}", response_model=GenreSchema)
-def update_genre(genre_id: int, genre_data: GenreUpdate, db: Session = Depends(get_db)):
+def update_genre(genre_id: int, genre_data: GenreUpdate, db: Session = Depends(get_db)) -> GenreSchema:
     """Update an existing genre."""
     genre = db.query(Genre).filter(Genre.id == genre_id).first()
     if not genre:
@@ -67,7 +67,7 @@ def update_genre(genre_id: int, genre_data: GenreUpdate, db: Session = Depends(g
 
 
 @router.delete("/{genre_id}", status_code=204)
-def delete_genre(genre_id: int, db: Session = Depends(get_db)):
+def delete_genre(genre_id: int, db: Session = Depends(get_db)) -> None:
     """Delete a genre."""
     genre = db.query(Genre).filter(Genre.id == genre_id).first()
     if not genre:

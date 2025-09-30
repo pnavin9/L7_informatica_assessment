@@ -1,7 +1,7 @@
 """Movie API endpoints with filtering support."""
-from typing import List, Optional
+from typing import List, Optional, Any, Dict
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session, joinedload, Query as SQLQuery
 from sqlalchemy import and_
 from app.api.deps import get_db
 from app.models import Movie, Genre, Actor, Director
@@ -10,7 +10,7 @@ from app.schemas import MovieDetail, Movie as MovieSchema, MovieCreate, MovieUpd
 router = APIRouter()
 
 
-def apply_movie_filters(query, **filters):
+def apply_movie_filters(query: SQLQuery, **filters: Any) -> SQLQuery:
     """Apply filters to movie query in a clean way."""
     # Define filter mappings
     filter_mappings = [
@@ -45,7 +45,7 @@ def get_movies(
     skip: int = Query(0, ge=0, description="Number of records to skip"),
     limit: int = Query(100, ge=1, le=100, description="Max records to return"),
     db: Session = Depends(get_db)
-):
+) -> List[MovieDetail]:
     """
     Get list of movies with optional filters.
     All filtering is performed in the backend using SQLAlchemy queries.
@@ -79,7 +79,7 @@ def get_movies(
 
 
 @router.get("/{movie_id}", response_model=MovieDetail)
-def get_movie(movie_id: int, db: Session = Depends(get_db)):
+def get_movie(movie_id: int, db: Session = Depends(get_db)) -> MovieDetail:
     """Get detailed movie information by ID."""
     movie = db.query(Movie).options(
         joinedload(Movie.director),
@@ -95,7 +95,7 @@ def get_movie(movie_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/", response_model=MovieSchema, status_code=201)
-def create_movie(movie_data: MovieCreate, db: Session = Depends(get_db)):
+def create_movie(movie_data: MovieCreate, db: Session = Depends(get_db)) -> MovieSchema:
     """Create a new movie."""
     # Verify director exists
     director = db.query(Director).filter(Director.id == movie_data.director_id).first()
@@ -131,7 +131,7 @@ def create_movie(movie_data: MovieCreate, db: Session = Depends(get_db)):
 
 
 @router.put("/{movie_id}", response_model=MovieSchema)
-def update_movie(movie_id: int, movie_data: MovieUpdate, db: Session = Depends(get_db)):
+def update_movie(movie_id: int, movie_data: MovieUpdate, db: Session = Depends(get_db)) -> MovieSchema:
     """Update an existing movie."""
     movie = db.query(Movie).filter(Movie.id == movie_id).first()
     if not movie:
@@ -165,7 +165,7 @@ def update_movie(movie_id: int, movie_data: MovieUpdate, db: Session = Depends(g
 
 
 @router.delete("/{movie_id}", status_code=204)
-def delete_movie(movie_id: int, db: Session = Depends(get_db)):
+def delete_movie(movie_id: int, db: Session = Depends(get_db)) -> None:
     """Delete a movie."""
     movie = db.query(Movie).filter(Movie.id == movie_id).first()
     if not movie:

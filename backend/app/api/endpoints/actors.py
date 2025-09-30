@@ -17,7 +17,7 @@ def get_actors(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=100),
     db: Session = Depends(get_db)
-):
+) -> List[ActorSchema]:
     """Get list of actors with optional filters."""
     query = db.query(Actor)
     
@@ -36,11 +36,11 @@ def get_actors(
         query = query.filter(Actor.name.ilike(f"%{search}%"))
     
     actors = query.distinct().offset(skip).limit(limit).all()
-    return actors
+    return [ActorSchema.model_validate(actor) for actor in actors]
 
 
 @router.get("/{actor_id}", response_model=ActorDetail)
-def get_actor(actor_id: int, db: Session = Depends(get_db)):
+def get_actor(actor_id: int, db: Session = Depends(get_db)) -> ActorDetail:
     """Get detailed actor information with their filmography."""
     actor = db.query(Actor).options(joinedload(Actor.movies)).filter(
         Actor.id == actor_id
@@ -53,7 +53,7 @@ def get_actor(actor_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/", response_model=ActorSchema, status_code=201)
-def create_actor(actor_data: ActorCreate, db: Session = Depends(get_db)):
+def create_actor(actor_data: ActorCreate, db: Session = Depends(get_db)) -> ActorSchema:
     """Create a new actor."""
     actor = Actor(**actor_data.model_dump())
     db.add(actor)
@@ -63,7 +63,7 @@ def create_actor(actor_data: ActorCreate, db: Session = Depends(get_db)):
 
 
 @router.put("/{actor_id}", response_model=ActorSchema)
-def update_actor(actor_id: int, actor_data: ActorUpdate, db: Session = Depends(get_db)):
+def update_actor(actor_id: int, actor_data: ActorUpdate, db: Session = Depends(get_db)) -> ActorSchema:
     """Update an existing actor."""
     actor = db.query(Actor).filter(Actor.id == actor_id).first()
     if not actor:
@@ -79,7 +79,7 @@ def update_actor(actor_id: int, actor_data: ActorUpdate, db: Session = Depends(g
 
 
 @router.delete("/{actor_id}", status_code=204)
-def delete_actor(actor_id: int, db: Session = Depends(get_db)):
+def delete_actor(actor_id: int, db: Session = Depends(get_db)) -> None:
     """Delete an actor."""
     actor = db.query(Actor).filter(Actor.id == actor_id).first()
     if not actor:

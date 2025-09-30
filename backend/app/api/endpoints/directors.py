@@ -16,7 +16,7 @@ def get_directors(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=100),
     db: Session = Depends(get_db)
-):
+) -> List[DirectorSchema]:
     """Get list of directors with optional filters."""
     query = db.query(Director)
     
@@ -31,11 +31,11 @@ def get_directors(
         query = query.filter(Director.name.ilike(f"%{search}%"))
     
     directors = query.distinct().offset(skip).limit(limit).all()
-    return directors
+    return [DirectorSchema.model_validate(director) for director in directors]
 
 
 @router.get("/{director_id}", response_model=DirectorDetail)
-def get_director(director_id: int, db: Session = Depends(get_db)):
+def get_director(director_id: int, db: Session = Depends(get_db)) -> DirectorDetail:
     """Get detailed director information with their filmography."""
     director = db.query(Director).options(joinedload(Director.movies)).filter(
         Director.id == director_id
@@ -48,7 +48,7 @@ def get_director(director_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/", response_model=DirectorSchema, status_code=201)
-def create_director(director_data: DirectorCreate, db: Session = Depends(get_db)):
+def create_director(director_data: DirectorCreate, db: Session = Depends(get_db)) -> DirectorSchema:
     """Create a new director."""
     director = Director(**director_data.model_dump())
     db.add(director)
@@ -58,7 +58,7 @@ def create_director(director_data: DirectorCreate, db: Session = Depends(get_db)
 
 
 @router.put("/{director_id}", response_model=DirectorSchema)
-def update_director(director_id: int, director_data: DirectorUpdate, db: Session = Depends(get_db)):
+def update_director(director_id: int, director_data: DirectorUpdate, db: Session = Depends(get_db)) -> DirectorSchema:
     """Update an existing director."""
     director = db.query(Director).filter(Director.id == director_id).first()
     if not director:
@@ -74,7 +74,7 @@ def update_director(director_id: int, director_data: DirectorUpdate, db: Session
 
 
 @router.delete("/{director_id}", status_code=204)
-def delete_director(director_id: int, db: Session = Depends(get_db)):
+def delete_director(director_id: int, db: Session = Depends(get_db)) -> None:
     """Delete a director."""
     director = db.query(Director).filter(Director.id == director_id).first()
     if not director:
