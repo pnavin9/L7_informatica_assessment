@@ -123,6 +123,9 @@ def seed_database(db: Session):
                 title="The Shawshank Redemption",
                 release_year=1994,
                 synopsis="Two imprisoned men bond over years, finding redemption through acts of decency.",
+                poster_url="https://image.tmdb.org/t/p/w500/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
+                duration_minutes=142,
+                status="Released",
                 director=get_director("Steven Spielberg")
             ),
             "genres": ["Drama"],
@@ -137,6 +140,9 @@ def seed_database(db: Session):
                 title="Goodfellas",
                 release_year=1990,
                 synopsis="The story of Henry Hill and his life in the mob.",
+                poster_url="https://image.tmdb.org/t/p/w500/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg",
+                duration_minutes=146,
+                status="Released",
                 director=get_director("Martin Scorsese")
             ),
             "genres": ["Crime", "Drama"],
@@ -150,6 +156,9 @@ def seed_database(db: Session):
                 title="Saving Private Ryan",
                 release_year=1998,
                 synopsis="Following the Normandy Landings, a group of soldiers search for a paratrooper.",
+                poster_url="https://image.tmdb.org/t/p/w500/uqx37cS8cpHg8U35f9U5IBlrCV3.jpg",
+                duration_minutes=169,
+                status="Released",
                 director=get_director("Steven Spielberg")
             ),
             "genres": ["Drama", "Action"],
@@ -196,6 +205,9 @@ def seed_database(db: Session):
                 title="Oppenheimer",
                 release_year=2023,
                 synopsis="The story of J. Robert Oppenheimer and the development of the atomic bomb.",
+                poster_url="https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
+                duration_minutes=180,
+                status="Released",
                 director=get_director("Christopher Nolan")
             ),
             "genres": ["Drama", "Thriller"],
@@ -210,6 +222,9 @@ def seed_database(db: Session):
                 title="Get Out",
                 release_year=2017,
                 synopsis="A young Black man visits his white girlfriend's family estate.",
+                poster_url="https://image.tmdb.org/t/p/w500/tFXcEccSQMf3lfhfXKSU9iRBpa3.jpg",
+                duration_minutes=104,
+                status="Released",
                 director=get_director("Jordan Peele")
             ),
             "genres": ["Horror", "Thriller"],
@@ -240,6 +255,9 @@ def seed_database(db: Session):
                 title="The Wolf of Wall Street",
                 release_year=2013,
                 synopsis="The story of Jordan Belfort's rise and fall on Wall Street.",
+                poster_url="https://image.tmdb.org/t/p/w500/34m2tygAYBGqA9MXKhRDtzYd4MR.jpg",
+                duration_minutes=180,
+                status="Released",
                 director=get_director("Martin Scorsese")
             ),
             "genres": ["Crime", "Comedy", "Drama"],
@@ -253,6 +271,9 @@ def seed_database(db: Session):
                 title="Fight Club",
                 release_year=1999,
                 synopsis="An insomniac office worker forms an underground fight club.",
+                poster_url="https://image.tmdb.org/t/p/w500/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg",
+                duration_minutes=139,
+                status="Released",
                 director=get_director("Steven Spielberg")
             ),
             "genres": ["Drama", "Thriller"],
