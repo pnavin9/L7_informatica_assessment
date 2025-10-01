@@ -1,17 +1,37 @@
 """Database seeding script with sample movie data."""
 
+import logging
 from sqlalchemy.orm import Session
 
 from app.models import Actor, Director, Genre, Movie, Rating
+
+logger = logging.getLogger(__name__)
 
 
 def seed_database(db: Session) -> None:
     """Populate database with sample movie data."""
 
-    # Check if data already exists
-    if db.query(Movie).first():
-        print("Database already seeded. Skipping...")
+    # Check if database is already seeded
+    existing_movies = db.query(Movie).count()
+    if existing_movies > 0:
+        logger.info(f"Database already seeded with {existing_movies} movies. Skipping seed.")
         return
+
+    # Clear existing data first (in case of partial seeding)
+    logger.info("Seeding database...")
+    
+    # Clear association tables
+    from app.models.movie import movie_actors, movie_genres
+    db.execute(movie_actors.delete())
+    db.execute(movie_genres.delete())
+
+    # Clear in correct order to avoid foreign key constraints
+    db.query(Rating).delete()
+    db.query(Movie).delete()
+    db.query(Actor).delete()
+    db.query(Director).delete()
+    db.query(Genre).delete()
+    db.commit()
 
     # Create Genres
     genres_data = [
