@@ -8,19 +8,11 @@ from app.models import Actor, Director, Genre, Movie, Rating
 logger = logging.getLogger(__name__)
 
 
-def seed_database(db: Session) -> None:
-    """Populate database with sample movie data."""
-
-    # Check if database is already seeded
-    existing_movies = db.query(Movie).count()
-    if existing_movies > 0:
-        logger.info(f"Database already seeded with {existing_movies} movies. Skipping seed.")
-        return
-
-    # Clear existing data first (in case of partial seeding)
-    logger.info("Seeding database...")
+def clear_database(db: Session) -> None:
+    """Clear all data from database."""
+    logger.info("Clearing database...")
     
-    # Clear association tables
+    # Clear association tables first
     from app.models.movie import movie_actors, movie_genres
     db.execute(movie_actors.delete())
     db.execute(movie_genres.delete())
@@ -32,6 +24,11 @@ def seed_database(db: Session) -> None:
     db.query(Director).delete()
     db.query(Genre).delete()
     db.commit()
+
+
+def seed_database(db: Session) -> None:
+    """Populate database with sample movie data."""
+    logger.info("Seeding database...")
 
     # Create Genres
     genres_data = [
