@@ -2,7 +2,7 @@ name: Docker Build and Push
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -57,6 +57,8 @@ jobs:
 
       - name: Test Docker image
         run: |
+          set -e
+          
           # Start container
           docker run -d --name test-api -p 8000:80 movie-explorer-api:test
           
@@ -64,11 +66,14 @@ jobs:
           sleep 10
           
           # Test health endpoint
-          curl -f http://localhost:8000/health || exit 1
+          curl -f http://localhost:8000/health
           
           # Test API endpoints
-          curl -f http://localhost:8000/ || exit 1
-          curl -f http://localhost:8000/api/movies || exit 1
+          curl -f http://localhost:8000/
+          curl -f http://localhost:8000/api/movies
+          
+          # Run pytest inside the container
+          docker exec test-api pytest tests/ -v --tb=short
           
           # Stop container
           docker stop test-api
