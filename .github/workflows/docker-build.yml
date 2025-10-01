@@ -72,6 +72,8 @@ jobs:
           curl -f http://localhost:8000/
           curl -f http://localhost:8000/api/movies
           
+          # Run pytest inside the container
+          docker exec test-api pytest tests/ -v --tb=short
           
           # Stop container
           docker stop test-api
