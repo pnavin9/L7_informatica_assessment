@@ -7,17 +7,20 @@ from typing import Dict, Any
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.db.database import init_db
-from app.db.seed_data import seed_database
+from app.db.seed_data import seed_database, clear_database
 from app.db.database import SessionLocal
+from app.models import Movie
 from app.api.endpoints import movies, actors, directors, genres, ratings
 
 # Initialize database
 init_db()
 
-# Seed database with sample data
+# Seed database with sample data (only if empty)
 db = SessionLocal()
 try:
-    seed_database(db)
+    existing_movies = db.query(Movie).count()
+    if existing_movies == 0:
+        seed_database(db)
 finally:
     db.close()
 
