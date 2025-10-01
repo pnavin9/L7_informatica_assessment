@@ -1,6 +1,7 @@
 """Database seeding script with sample movie data."""
 
 import logging
+
 from sqlalchemy.orm import Session
 
 from app.models import Actor, Director, Genre, Movie, Rating
@@ -11,9 +12,10 @@ logger = logging.getLogger(__name__)
 def clear_database(db: Session) -> None:
     """Clear all data from database."""
     logger.info("Clearing database...")
-    
+
     # Clear association tables first
     from app.models.movie import movie_actors, movie_genres
+
     db.execute(movie_actors.delete())
     db.execute(movie_genres.delete())
 

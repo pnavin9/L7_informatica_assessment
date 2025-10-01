@@ -1,5 +1,6 @@
-from pydantic import BaseModel, Field, ConfigDict
-from typing import Optional, List, TYPE_CHECKING
+from typing import TYPE_CHECKING, List, Optional
+
+from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
     from .movie import Movie
@@ -29,6 +30,7 @@ class Actor(ActorBase):
 
 class ActorDetail(Actor):
     """Actor with their movies."""
+
     movies: List["Movie"] = []
 
     model_config = ConfigDict(from_attributes=True)

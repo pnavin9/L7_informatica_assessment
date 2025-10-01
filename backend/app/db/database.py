@@ -4,6 +4,7 @@ Database configuration and session management.
 Schema inspired by IMDb database structure:
 https://www.researchgate.net/figure/Complete-schema-of-the-IMDb-database-with-8-main-relations-movie-person-genre_fig1_348079657
 """
+
 import os
 
 from sqlalchemy import create_engine

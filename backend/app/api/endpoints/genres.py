@@ -7,8 +7,8 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
 from app.models import Genre
-from app.schemas import GenreCreate, GenreUpdate
 from app.schemas import Genre as GenreSchema
+from app.schemas import GenreCreate, GenreUpdate
 
 router = APIRouter()
 

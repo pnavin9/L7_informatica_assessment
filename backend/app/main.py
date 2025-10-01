@@ -3,14 +3,16 @@ Main FastAPI application.
 
 Movie Explorer Platform - RESTful API with comprehensive filtering.
 """
-from typing import Dict, Any
+
+from typing import Any, Dict
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.db.database import init_db
-from app.db.seed_data import seed_database, clear_database
-from app.db.database import SessionLocal
+
+from app.api.endpoints import actors, directors, genres, movies, ratings
+from app.db.database import SessionLocal, init_db
+from app.db.seed_data import seed_database
 from app.models import Movie
-from app.api.endpoints import movies, actors, directors, genres, ratings
 
 # Initialize database
 init_db()

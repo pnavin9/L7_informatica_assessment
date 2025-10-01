@@ -1,11 +1,14 @@
 """Actor API endpoints."""
 
 from typing import List, Optional
+
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session, joinedload
+
 from app.api.deps import get_db
-from app.models import Actor, Movie, Genre
-from app.schemas import Actor as ActorSchema, ActorDetail, ActorCreate, ActorUpdate
+from app.models import Actor, Genre, Movie
+from app.schemas import Actor as ActorSchema
+from app.schemas import ActorCreate, ActorDetail, ActorUpdate
 
 router = APIRouter()
 

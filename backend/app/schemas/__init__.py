@@ -1,8 +1,8 @@
+from .actor import Actor, ActorCreate, ActorDetail, ActorUpdate
+from .director import Director, DirectorCreate, DirectorDetail, DirectorUpdate
 from .genre import Genre, GenreCreate, GenreUpdate
+from .movie import Movie, MovieCreate, MovieDetail, MovieUpdate
 from .rating import Rating, RatingCreate, RatingUpdate
-from .director import Director, DirectorCreate, DirectorUpdate, DirectorDetail
-from .actor import Actor, ActorCreate, ActorUpdate, ActorDetail
-from .movie import Movie, MovieCreate, MovieUpdate, MovieDetail
 
 # Rebuild models to resolve forward references
 ActorDetail.model_rebuild()
