@@ -1,8 +1,10 @@
-from pydantic import BaseModel, Field, ConfigDict, field_validator, computed_field
-from typing import Optional, List
-from .genre import Genre
+from typing import List, Optional
+
+from pydantic import BaseModel, ConfigDict, Field, computed_field, field_validator
+
 from .actor import Actor
 from .director import Director
+from .genre import Genre
 from .rating import Rating
 
 

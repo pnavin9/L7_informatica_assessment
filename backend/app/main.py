@@ -3,21 +3,26 @@ Main FastAPI application.
 
 Movie Explorer Platform - RESTful API with comprehensive filtering.
 """
-from typing import Dict, Any
+
+from typing import Any, Dict
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.db.database import init_db
+
+from app.api.endpoints import actors, directors, genres, movies, ratings
+from app.db.database import SessionLocal, init_db
 from app.db.seed_data import seed_database
-from app.db.database import SessionLocal
-from app.api.endpoints import movies, actors, directors, genres, ratings
+from app.models import Movie
 
 # Initialize database
 init_db()
 
-# Seed database with sample data
+# Seed database with sample data (only if empty)
 db = SessionLocal()
 try:
-    seed_database(db)
+    existing_movies = db.query(Movie).count()
+    if existing_movies == 0:
+        seed_database(db)
 finally:
     db.close()
 

@@ -3,13 +3,13 @@
 from typing import Any, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy.orm import Session, joinedload
 from sqlalchemy.orm import Query as SQLQuery
+from sqlalchemy.orm import Session, joinedload
 
 from app.api.deps import get_db
 from app.models import Actor, Director, Genre, Movie
-from app.schemas import MovieCreate, MovieDetail, MovieUpdate
 from app.schemas import Movie as MovieSchema
+from app.schemas import MovieCreate, MovieDetail, MovieUpdate
 
 router = APIRouter()
 

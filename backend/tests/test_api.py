@@ -1,6 +1,8 @@
 """Test API endpoints."""
+
 import pytest
 from fastapi.testclient import TestClient
+
 from app.main import app
 
 client = TestClient(app)
@@ -29,7 +31,7 @@ def test_get_movies():
     movies = response.json()
     assert isinstance(movies, list)
     assert len(movies) > 0
-    
+
     # Check movie structure
     movie = movies[0]
     assert "id" in movie
@@ -47,7 +49,7 @@ def test_filter_movies_by_genre():
     assert response.status_code == 200
     movies = response.json()
     assert len(movies) > 0
-    
+
     # Verify all movies have Action genre
     for movie in movies:
         genre_names = [g["name"] for g in movie["genres"]]
@@ -60,7 +62,7 @@ def test_filter_movies_by_director():
     assert response.status_code == 200
     movies = response.json()
     assert len(movies) > 0
-    
+
     # Verify all movies are by Nolan
     for movie in movies:
         assert "Nolan" in movie["director"]["name"]
@@ -72,7 +74,7 @@ def test_filter_movies_by_actor():
     assert response.status_code == 200
     movies = response.json()
     assert len(movies) > 0
-    
+
     # Verify all movies have Leonardo DiCaprio
     for movie in movies:
         actor_names = [a["name"] for a in movie["actors"]]
@@ -84,7 +86,7 @@ def test_filter_movies_by_year():
     response = client.get("/api/movies?year=2010")
     assert response.status_code == 200
     movies = response.json()
-    
+
     for movie in movies:
         assert movie["release_year"] == 2010
 
@@ -94,7 +96,7 @@ def test_filter_movies_by_year_range():
     response = client.get("/api/movies?min_year=2015&max_year=2023")
     assert response.status_code == 200
     movies = response.json()
-    
+
     for movie in movies:
         assert 2015 <= movie["release_year"] <= 2023
 
@@ -188,7 +190,7 @@ def test_get_movie_ratings():
     assert response.status_code == 200
     ratings = response.json()
     assert isinstance(ratings, list)
-    
+
     if len(ratings) > 0:
         assert "score" in ratings[0]
         assert "review" in ratings[0]
@@ -200,11 +202,11 @@ def test_pagination():
     assert response1.status_code == 200
     movies1 = response1.json()
     assert len(movies1) <= 5
-    
+
     response2 = client.get("/api/movies?skip=5&limit=5")
     assert response2.status_code == 200
     movies2 = response2.json()
-    
+
     # Verify different results
     if len(movies2) > 0:
         assert movies1[0]["id"] != movies2[0]["id"]

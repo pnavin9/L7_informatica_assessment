@@ -1,11 +1,14 @@
 """Rating API endpoints."""
 
 from typing import List
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+
 from app.api.deps import get_db
-from app.models import Rating, Movie
-from app.schemas import Rating as RatingSchema, RatingCreate, RatingUpdate
+from app.models import Movie, Rating
+from app.schemas import Rating as RatingSchema
+from app.schemas import RatingCreate, RatingUpdate
 
 router = APIRouter()
 

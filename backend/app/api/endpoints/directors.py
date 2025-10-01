@@ -1,11 +1,14 @@
 """Director API endpoints."""
 
 from typing import List, Optional
+
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session, joinedload
+
 from app.api.deps import get_db
-from app.models import Director, Movie, Genre
-from app.schemas import Director as DirectorSchema, DirectorDetail, DirectorCreate, DirectorUpdate
+from app.models import Director, Genre, Movie
+from app.schemas import Director as DirectorSchema
+from app.schemas import DirectorCreate, DirectorDetail, DirectorUpdate
 
 router = APIRouter()
 
