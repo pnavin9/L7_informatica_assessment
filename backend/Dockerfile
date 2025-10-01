@@ -23,8 +23,9 @@ COPY requirements.txt /code/
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r /code/requirements.txt
 
-# Copy application code
+# Copy application code and tests
 COPY ./app /code/app
+COPY ./tests /code/tests
 
 # Create directory for SQLite database
 RUN mkdir -p /code/data
