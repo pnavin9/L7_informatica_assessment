@@ -53,42 +53,42 @@ def seed_database(db: Session) -> None:
         Director(
             name="Christopher Nolan",
             bio="British-American filmmaker known for complex narratives.",
-            photo_url="https://image.tmdb.org/t/p/w500/5xU17nQuj9aB9GoopdfSX0QgTqG.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/xuAIuYSmsUzKlUMBFGVZaWsY3DZ.jpg",
         ),
         Director(
             name="Quentin Tarantino",
             bio="American filmmaker known for nonlinear storylines.",
-            photo_url="https://image.tmdb.org/t/p/w500/8jEumAVtJ4BXZgqDkJ4e6q1cY1l.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/1gjcpAa99FAOWGnrUvHEXXsRs7o.jpg",
         ),
         Director(
             name="Martin Scorsese",
             bio="Legendary American director and film historian.",
-            photo_url="https://image.tmdb.org/t/p/w500/9U9Y5GQuWX3EZy39B8nkk4NY01S.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/9U9Y5GQuWX3EZy39B8nkk4NY01S.jpg",
         ),
         Director(
             name="Steven Spielberg",
             bio="One of the founding pioneers of the New Hollywood era.",
-            photo_url="https://image.tmdb.org/t/p/w500/7xXJ15VEf7G9GdAuV1dOdcPw4hP.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/tZxcg19YQ3e8fJ0pOs7hjlnmmr6.jpg",
         ),
         Director(
             name="Denis Villeneuve",
             bio="Canadian filmmaker known for ambitious sci-fi films.",
-            photo_url="https://image.tmdb.org/t/p/w500/5U8BHbGC5ocBphl58tb3Vb9V0EA.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/zdDx9Xs93UIrJFWYApYR28J8M6b.jpg",
         ),
         Director(
             name="Greta Gerwig",
             bio="American actress and filmmaker.",
-            photo_url="https://image.tmdb.org/t/p/w500/8kOGNJBR9X2V7XvO7i3hX2kF5yL.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/6MwQ2GstYr0wnhp1eTOAbVMNBGN.jpg",
         ),
         Director(
             name="Jordan Peele",
             bio="American filmmaker known for social thriller films.",
-            photo_url="https://image.tmdb.org/t/p/w500/6J7fXIGqjqjqjqjqjqjqjqjqjqjq.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/kFUKn5g3ebpyZ3CSZZZo2HFWRNQ.jpg",
         ),
         Director(
             name="Bong Joon-ho",
             bio="South Korean filmmaker known for genre-bending films.",
-            photo_url="https://image.tmdb.org/t/p/w500/5U8BHbGC5ocBphl58tb3Vb9V0EA.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/stwnTvZAoD8gEJEDHpDQyLCyDy5.jpg",
         ),
     ]
     db.add_all(directors_data)
@@ -99,77 +99,77 @@ def seed_database(db: Session) -> None:
         Actor(
             name="Leonardo DiCaprio",
             bio="American actor and film producer.",
-            photo_url="https://image.tmdb.org/t/p/w500/5Brc5dLifH3suIax9hsWg2Uq4O.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
         ),
         Actor(
             name="Christian Bale",
             bio="English actor known for method acting.",
-            photo_url="https://image.tmdb.org/t/p/w500/qCpZn2e3dimwbryLnqxZuQ88st.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/7Pxez9J8fuPd2Mn9kex13YALrCQ.jpg",
         ),
         Actor(
             name="Samuel L. Jackson",
             bio="American actor and producer.",
-            photo_url="https://image.tmdb.org/t/p/w500/5Brc5dLifH3suIax9hsWg2Uq4O.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/AiAYAqwpM5xmiFrAIeQvUXDCVvo.jpg",
         ),
         Actor(
             name="Morgan Freeman",
             bio="American actor, director, and narrator.",
-            photo_url="https://image.tmdb.org/t/p/w500/oGJQhOpT8S1M56tvSsbEBePV5O1.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/jPsLqiYGSofU4s6BjrxnefMfabb.jpg",
         ),
         Actor(
             name="Robert De Niro",
             bio="American actor and producer.",
-            photo_url="https://image.tmdb.org/t/p/w500/8Bgdfv1oN9Mw0YuMHP6fw8KzDkc.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/cT8htcckIuyI1Lqwt1CvD02ynTh.jpg",
         ),
         Actor(
             name="Tom Hanks",
             bio="American actor and filmmaker.",
-            photo_url="https://image.tmdb.org/t/p/w500/xndWFs6Ckd7jkqD6z3i5a98wS3v.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/eKF1sGJRrZJbfBG1KirPt1cfNd3.jpg",
         ),
         Actor(
             name="Scarlett Johansson",
             bio="American actress and singer.",
-            photo_url="https://image.tmdb.org/t/p/w500/6NsMbJXRlDZuDzatN2akFdGuTvx.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/mjReG6rR7NPMEIWb1T4YWtV11ty.jpg",
         ),
         Actor(
             name="Brad Pitt",
             bio="American actor and film producer.",
-            photo_url="https://image.tmdb.org/t/p/w500/cckcYc2v0yh1tc9QjKrptksfizC.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/9OfnD7lxgIj3BNQpJFnwxnwl6w5.jpg",
         ),
         Actor(
             name="Cillian Murphy",
             bio="Irish actor known for intense performances.",
-            photo_url="https://image.tmdb.org/t/p/w500/2v9FVVBUrrkW2m3QOcYkuhq9A6o.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/llkbyWKwpfowZ6C8peBjIV9jj99.jpg",
         ),
         Actor(
             name="Margot Robbie",
             bio="Australian actress and producer.",
-            photo_url="https://image.tmdb.org/t/p/w500/euDPyqLnuwaWMHajcU3oZ9uZezR.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/euDPyqLnuwaWMHajcU3oZ9uZezR.jpg",
         ),
         Actor(
             name="Ryan Gosling",
             bio="Canadian actor and musician.",
-            photo_url="https://image.tmdb.org/t/p/w500/4EuJ0o59ipS4k5t8Wb8igI9Mx6b.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/asoKC7CLCqpZKZDL6iovNurQUdf.jpg",
         ),
         Actor(
             name="Timothée Chalamet",
             bio="American and French actor.",
-            photo_url="https://image.tmdb.org/t/p/w500/8xV47e7Rudb96lcyvnLJ3y8bYS.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/BE2sdjpgsa2rNTFa66f7upkaOP.jpg",
         ),
         Actor(
             name="Zendaya",
             bio="American actress and singer.",
-            photo_url="https://image.tmdb.org/t/p/w500/6TE2AlGWqc4uJjH7e4xjq6dUxCW.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/3WdOloHpjtjL96uVOhFRRCcYSwq.jpg",
         ),
         Actor(
             name="Daniel Kaluuya",
             bio="British actor and writer.",
-            photo_url="https://image.tmdb.org/t/p/w500/4EuJ0o59ipS4k5t8Wb8igI9Mx6b.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/jj2kZqJobjom36wlhlYhc38nTwN.jpg",
         ),
         Actor(
             name="Song Kang-ho",
             bio="South Korean actor.",
-            photo_url="https://image.tmdb.org/t/p/w500/5Brc5dLifH3suIax9hsWg2Uq4O.jpg",
+            photo_url="https://image.tmdb.org/t/p/original/7dw9wIpFZ5nJZ3zqrue8t7hUUgQ.jpg",
         ),
     ]
     db.add_all(actors_data)
