@@ -37,5 +37,5 @@ EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD python -c "import requests; requests.get('http://localhost:80/health')" || exit 1
 
-# Run the application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+# Run the application with proxy headers enabled (for correct HTTPS redirects behind proxies)
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80", "--proxy-headers", "--forwarded-allow-ips", "*"]
