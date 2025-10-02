@@ -14,8 +14,8 @@ COPY . .
 ARG VITE_API_BASE_URL=
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 
-# Build the production bundle
-RUN npm run build
+# Build the production bundle with linting (fails on lint errors)
+RUN npm run build:ci
 
 
 # Stage 2: Serve with Nginx

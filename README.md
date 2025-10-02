@@ -14,8 +14,11 @@ FastAPI backend with SQLite database and comprehensive filtering.
 git clone <repo-url>
 cd L7_informatica_assessment
 
-# Start application
-docker-compose up -d
+# Start application (backend + frontend)
+docker-compose up -d --build
+
+# Access Frontend (served by Nginx)
+open http://localhost:5173/
 
 # Access API documentation
 open http://localhost:8000/docs
@@ -39,6 +42,20 @@ curl "http://localhost:8000/api/movies/?genre=Action"
 
 # Search movies
 curl "http://localhost:8000/api/movies/?search=Inception"
+```
+
+## Frontend ↔ Backend connectivity
+
+The frontend uses `VITE_API_BASE_URL` at build/runtime to reach the backend. In Compose, services share a network and can reach each other via DNS names (service name).
+
+- In `docker-compose.yml`, the frontend is built with:
+  - `VITE_API_BASE_URL=http://backend:80`
+- The frontend code reads `import.meta.env.VITE_API_BASE_URL` and prefixes requests (see `frontend/src/services/api.ts`).
+- When running locally without Compose, you can override with:
+
+```bash
+cd frontend
+VITE_API_BASE_URL=http://localhost:8000 npm run dev
 ```
 
 ## Health Checks

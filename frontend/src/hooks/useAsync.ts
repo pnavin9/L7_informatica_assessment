@@ -18,9 +18,9 @@ export function useAsync<T>(asyncFn: (signal?: AbortSignal) => Promise<T>, deps:
     fnRef.current(controller.signal)
       .then((result) => setState({ data: result, error: null, loading: false }))
       .catch((err: unknown) => {
-        if ((err as any)?.name === 'AbortError') return
+        if (typeof err === 'object' && err !== null && 'name' in err && (err as { name?: unknown }).name === 'AbortError') return
         const message = (err as Error)?.message || 'Request failed'
-        logger.error('useAsync error', { message, err: err as object })
+        logger.error('useAsync error', { message, err: err as Record<string, unknown> | undefined })
         setState({ data: null, error: message, loading: false })
       })
     return () => controller.abort()
