@@ -27,6 +27,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 COPY ./app /code/app
 COPY ./tests /code/tests
 COPY pyproject.toml /code
+COPY .flake8 /code
 
 # Create directory for SQLite database
 RUN mkdir -p /code/data
