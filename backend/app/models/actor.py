@@ -3,7 +3,6 @@ from sqlalchemy.orm import relationship
 
 from app.db.database import Base
 
-
 """SQLAlchemy model for actors appearing in movies."""
 
 

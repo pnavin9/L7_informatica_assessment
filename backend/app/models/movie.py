@@ -3,7 +3,6 @@ from sqlalchemy.orm import relationship
 
 from app.db.database import Base
 
-
 """SQLAlchemy models for movie entities and association tables.
 
 Defines:
