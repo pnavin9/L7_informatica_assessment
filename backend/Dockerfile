@@ -31,7 +31,9 @@ COPY ./tests /code/tests
 RUN mkdir -p /code/data
 
 # Run lint checks during build (fail early on style issues)
-RUN make -C /code lint-ci
+RUN black --check /code/app /code/tests \
+    && isort --check-only /code/app /code/tests \
+    && flake8 /code/app /code/tests
 
 # Expose port
 EXPOSE 80

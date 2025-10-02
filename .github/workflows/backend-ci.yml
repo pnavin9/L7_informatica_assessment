@@ -29,9 +29,13 @@ jobs:
           pip install -r requirements.txt
 
       - name: Lint (black/isort/flake8)
-        run: make lint-ci
+        run: |
+          black --check app tests
+          isort --check-only app tests
+          flake8 app tests
 
       - name: Run pytest
-        run: make test-ci
+        run: |
+          pytest tests/ --tb=short -q
 
 
