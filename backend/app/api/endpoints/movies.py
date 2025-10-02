@@ -3,6 +3,7 @@
 from typing import Any, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy import or_
 from sqlalchemy.orm import Query as SQLQuery
 from sqlalchemy.orm import Session, joinedload
 
@@ -82,6 +83,41 @@ def get_movies(
     movies = query.distinct().offset(skip).limit(limit).all()
 
     # Convert to MovieDetail (computed fields are automatic)
+    return [MovieDetail.model_validate(movie) for movie in movies]
+
+
+@router.get("/search", response_model=List[MovieDetail])
+def search_movies(
+    q: str = Query(..., min_length=1, description="Unified OR search across title, director, actor, genre"),
+    skip: int = Query(0, ge=0, description="Number of records to skip"),
+    limit: int = Query(100, ge=1, le=100, description="Max records to return"),
+    db: Session = Depends(get_db),
+) -> List[MovieDetail]:
+    """Unified OR search across movie title, director, actor, and genre using ORM joins."""
+    # Eager load relations for response while using outer joins for filtering
+    query = (
+        db.query(Movie)
+        .options(
+            joinedload(Movie.director),
+            joinedload(Movie.genres),
+            joinedload(Movie.actors),
+            joinedload(Movie.ratings),
+        )
+        .outerjoin(Movie.director)
+        .outerjoin(Movie.actors)
+        .outerjoin(Movie.genres)
+        .filter(
+            or_(
+                Movie.title.ilike(f"%{q}%"),
+                Director.name.ilike(f"%{q}%"),
+                Actor.name.ilike(f"%{q}%"),
+                Genre.name.ilike(f"%{q}%"),
+            )
+        )
+        .distinct()
+    )
+
+    movies = query.offset(skip).limit(limit).all()
     return [MovieDetail.model_validate(movie) for movie in movies]
 
 
