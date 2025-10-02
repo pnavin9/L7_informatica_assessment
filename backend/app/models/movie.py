@@ -35,6 +35,7 @@ class Movie(Base):
     Represents a film with basic metadata and relationships to a single
     director, many actors, many genres, and user ratings.
     """
+
     __tablename__ = "movies"
 
     id = Column(Integer, primary_key=True, index=True)

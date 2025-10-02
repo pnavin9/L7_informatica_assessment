@@ -12,6 +12,7 @@ class Director(Base):
 
     A director can be linked to many movies (one-to-many).
     """
+
     __tablename__ = "directors"
 
     id = Column(Integer, primary_key=True, index=True)

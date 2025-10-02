@@ -12,6 +12,7 @@ class Genre(Base):
 
     Linked to movies via many-to-many association `movie_genres`.
     """
+
     __tablename__ = "genres"
 
     id = Column(Integer, primary_key=True, index=True)

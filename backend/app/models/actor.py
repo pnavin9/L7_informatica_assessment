@@ -13,6 +13,7 @@ class Actor(Base):
     Maintains a many-to-many relationship to movies via the `movie_actors`
     association table.
     """
+
     __tablename__ = "actors"
 
     id = Column(Integer, primary_key=True, index=True)
