@@ -26,6 +26,26 @@ services:
     networks:
       - movie-explorer-network
 
+  # React Frontend Service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # Point frontend to backend service through compose network DNS
+        - VITE_API_BASE_URL=http://backend:80
+    container_name: movie-explorer-web
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
+    environment:
+      # Optional override at runtime (takes precedence over build arg if provided)
+      - VITE_API_BASE_URL=http://backend:80
+    restart: unless-stopped
+    networks:
+      - movie-explorer-network
+
 networks:
   movie-explorer-network:
     driver: bridge

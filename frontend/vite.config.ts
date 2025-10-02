@@ -7,6 +7,15 @@ export default defineConfig(({ command, mode }) => {
   const isDev = command === 'serve' && mode !== 'production'
   return {
     plugins: [react(), tailwindcss()],
+    test: {
+      environment: 'jsdom',
+      setupFiles: ['./src/setupTests.ts'],
+      css: true,
+      globals: true,
+      coverage: {
+        reporter: ['text', 'html'],
+      },
+    },
     server: {
       port: 5173,
       proxy: isDev

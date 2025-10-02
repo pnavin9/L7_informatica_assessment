@@ -1,4 +1,4 @@
-import type { Movie, MovieDetail, Actor, Director } from '../types'
+import type { Movie, MovieDetail, Actor, Director, Genre } from '../types'
 import { logger } from './logger'
 
 // Resolve API base URL from environment for production; empty string keeps relative paths for dev proxy
@@ -155,6 +155,11 @@ export async function getDirector(id: string | number) {
   return fetchJSON<Director>(`/api/directors/${id}`)
 }
 
+// Genres
+export async function getGenres() {
+  return fetchJSON<Genre[]>(`/api/genres`)
+}
+
 export const api = {
   fetchJSON,
   getMovies,
@@ -164,6 +169,7 @@ export const api = {
   getActor,
   getDirectors,
   getDirector,
+  getGenres,
 }
 
 

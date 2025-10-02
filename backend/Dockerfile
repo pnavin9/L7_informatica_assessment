@@ -30,6 +30,9 @@ COPY ./tests /code/tests
 # Create directory for SQLite database
 RUN mkdir -p /code/data
 
+# Run lint checks during build (fail early on style issues)
+RUN make -C /code lint-ci
+
 # Expose port
 EXPOSE 80
 
