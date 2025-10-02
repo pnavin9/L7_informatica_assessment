@@ -7,6 +7,11 @@ type AsyncState<T> = {
   loading: boolean
 }
 
+/**
+ * React hook to run an async function with loading and error state.
+ * - Cancels in-flight request on unmount or dependency change
+ * - Logs errors via `logger`
+ */
 export function useAsync<T>(asyncFn: (signal?: AbortSignal) => Promise<T>, deps: unknown[] = []) {
   const [state, setState] = useState<AsyncState<T>>({ data: null, error: null, loading: true })
   const fnRef = useRef(asyncFn)

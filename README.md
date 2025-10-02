@@ -57,6 +57,50 @@ VITE_API_BASE_URL=http://localhost:8000 npm run dev
 ## Environment
 - `VITE_API_BASE_URL`: Base URL used by the frontend to call the API (see `frontend/src/services/api.ts`).
 
+## Architecture
+
+```mermaid
+graph TD
+  subgraph Frontend
+    U[Browser]
+    N[Nginx]
+    R[React App]
+    RR[React Router]
+    AC[API Client]
+    UA[useAsync]
+    U --> N --> R --> RR --> AC
+    UA --> AC
+  end
+
+  subgraph Backend
+    S[Uvicorn]
+    F[FastAPI]
+    Rt[Routers]
+    OR[SQLAlchemy]
+    P[Pydantic]
+    SD[Seed Data]
+    S --> F --> Rt
+    Rt --> OR
+    Rt --> P
+    F --> SD
+  end
+
+  subgraph Storage
+    DB[(SQLite)]
+  end
+
+  subgraph Infra
+    FEc[Frontend container]
+    BEc[Backend container]
+    Net[Compose network]
+    FEc -- network --> Net
+    Net -- network --> BEc
+  end
+
+  AC --> F
+  OR --> DB
+```
+
 ## API overview (selected)
 - Movies
   - `GET /api/movies` query: `genre`, `director`, `actor`, `year`, `min_year`, `max_year`, `status`, `search`, `skip` (>=0), `limit` (1..100)
