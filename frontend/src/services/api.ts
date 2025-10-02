@@ -132,17 +132,9 @@ export async function getMovie(id: string | number) {
   return fetchJSON<MovieDetail>(`/api/movies/${id}`)
 }
 
-// Unified OR search kept client-side for now
+// Unified OR search via backend
 export async function searchMoviesOR(q: string) {
-  const [byTitle, byDirector, byActor, byGenre] = await Promise.all([
-    getMovies({ search: q }),
-    getMovies({ director: q }),
-    getMovies({ actor: q }),
-    getMovies({ genre: q })
-  ])
-  const all = [...byTitle, ...byDirector, ...byActor, ...byGenre]
-  const unique = Array.from(new Map(all.map(m => [m.id, m])).values())
-  return unique
+  return fetchJSON<Movie[]>(`/api/movies/search${buildQuery({ q })}`)
 }
 
 // Actors
