@@ -3,6 +3,14 @@ from sqlalchemy.orm import relationship
 
 from app.db.database import Base
 
+"""SQLAlchemy models for movie entities and association tables.
+
+Defines:
+- movie_genres: association for many-to-many Movie↔Genre
+- movie_actors: association for many-to-many Movie↔Actor
+- Movie: core movie entity with relationships and basic attributes
+"""
+
 # Association table for many-to-many relationship between movies and genres
 movie_genres = Table(
     "movie_genres",
@@ -21,6 +29,12 @@ movie_actors = Table(
 
 
 class Movie(Base):
+    """Movie entity.
+
+    Represents a film with basic metadata and relationships to a single
+    director, many actors, many genres, and user ratings.
+    """
+
     __tablename__ = "movies"
 
     id = Column(Integer, primary_key=True, index=True)

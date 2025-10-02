@@ -3,8 +3,15 @@ from sqlalchemy.orm import relationship
 
 from app.db.database import Base
 
+"""SQLAlchemy model for genres that categorize movies."""
+
 
 class Genre(Base):
+    """Genre entity with unique name.
+
+    Linked to movies via many-to-many association `movie_genres`.
+    """
+
     __tablename__ = "genres"
 
     id = Column(Integer, primary_key=True, index=True)

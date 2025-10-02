@@ -3,8 +3,15 @@ from sqlalchemy.orm import relationship
 
 from app.db.database import Base
 
+"""SQLAlchemy model for user ratings on movies."""
+
 
 class Rating(Base):
+    """Rating entity.
+
+    Simple numeric score with optional free‑text review, linked to a Movie.
+    """
+
     __tablename__ = "ratings"
 
     id = Column(Integer, primary_key=True, index=True)

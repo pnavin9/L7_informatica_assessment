@@ -2,6 +2,11 @@ import type { Movie, MovieDetail, Actor, Director, Genre } from '../types'
 import { logger } from './logger'
 
 // Resolve API base URL from environment for production; empty string keeps relative paths for dev proxy
+/**
+ * Builds the API base URL from `VITE_API_BASE_URL`.
+ * - In local dev, leave empty to use Vite dev server proxy.
+ * - In production, set a full absolute URL (e.g., https://api.example.com).
+ */
 const API_BASE_URL = ((import.meta as unknown as { env?: { VITE_API_BASE_URL?: string } })?.env?.VITE_API_BASE_URL ?? '').replace(/\/$/, '')
 
 type QueryParams = Record<string, string | number | boolean | undefined | null>
@@ -18,16 +23,20 @@ function buildQuery(params?: QueryParams): string {
   return query ? `?${query}` : ''
 }
 
+/** Intercepts a request before `fetch` is called. */
 type RequestInterceptor = (input: RequestInfo, init?: RequestInit) => Promise<[RequestInfo, RequestInit?]> | [RequestInfo, RequestInit?]
+/** Intercepts a response after `fetch` completes. */
 type ResponseInterceptor = (response: Response) => Promise<Response> | Response
 
 const requestInterceptors: RequestInterceptor[] = []
 const responseInterceptors: ResponseInterceptor[] = []
 
+/** Register a request interceptor. */
 export function addRequestInterceptor(interceptor: RequestInterceptor) {
   requestInterceptors.push(interceptor)
 }
 
+/** Register a response interceptor. */
 export function addResponseInterceptor(interceptor: ResponseInterceptor) {
   responseInterceptors.push(interceptor)
 }
@@ -48,6 +57,13 @@ function buildCacheKey(url: string, init?: RequestInit, opts?: CacheOptions) {
   return `${method}:${url}:${body}`
 }
 
+/**
+ * Fetch JSON with sensible defaults:
+ * - Merges base URL when `url` is relative
+ * - Applies request/response interceptors
+ * - Adds 15s timeout with AbortController
+ * - Caches GET responses in-memory for `cacheTtlMs` (default 30s)
+ */
 async function fetchJSON<T>(url: string, init?: RequestInit & { timeoutMs?: number; signal?: AbortSignal } & CacheOptions): Promise<T> {
   const isAbsolute = /^https?:\/\//i.test(url)
   const finalUrl = isAbsolute ? url : `${API_BASE_URL}${url}`
@@ -124,38 +140,46 @@ async function fetchJSON<T>(url: string, init?: RequestInit & { timeoutMs?: numb
 }
 
 // Movies
+/** List movies with optional backend filters. */
 export async function getMovies(params?: QueryParams) {
   return fetchJSON<Movie[]>(`/api/movies${buildQuery(params)}`)
 }
 
+/** Get detailed movie by id. */
 export async function getMovie(id: string | number) {
   return fetchJSON<MovieDetail>(`/api/movies/${id}`)
 }
 
 // Unified OR search via backend
+/** Search movies across title, director, actor, and genre. */
 export async function searchMoviesOR(q: string) {
   return fetchJSON<Movie[]>(`/api/movies/search${buildQuery({ q })}`)
 }
 
 // Actors
+/** List actors. */
 export async function getActors() {
   return fetchJSON<Actor[]>(`/api/actors`)
 }
 
+/** Get detailed actor by id. */
 export async function getActor(id: string | number) {
   return fetchJSON<Actor>(`/api/actors/${id}`)
 }
 
 // Directors
+/** List directors. */
 export async function getDirectors() {
   return fetchJSON<Director[]>(`/api/directors`)
 }
 
+/** Get detailed director by id. */
 export async function getDirector(id: string | number) {
   return fetchJSON<Director>(`/api/directors/${id}`)
 }
 
 // Genres
+/** List genres. */
 export async function getGenres() {
   return fetchJSON<Genre[]>(`/api/genres`)
 }
