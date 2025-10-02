@@ -33,7 +33,7 @@ services:
       dockerfile: Dockerfile
       args:
         # Point frontend to backend service through compose network DNS
-        - VITE_API_BASE_URL=http://backend:80
+        - VITE_API_BASE_URL=http://localhost:8000
     container_name: movie-explorer-web
     depends_on:
       - backend
@@ -41,7 +41,7 @@ services:
       - "5173:80"
     environment:
       # Optional override at runtime (takes precedence over build arg if provided)
-      - VITE_API_BASE_URL=http://backend:80
+      - VITE_API_BASE_URL=http://localhost:8000
     restart: unless-stopped
     networks:
       - movie-explorer-network
