@@ -26,25 +26,30 @@ export default defineConfig(({ command, mode }) => {
               secure: true,
               configure(proxy) {
                 const write = (line: string) => console.log(line)
-                const p = proxy as any
-                p.on('proxyReq', (_proxyReq: any, req: any) => {
-                  ;(req as any)._startTime = Date.now()
+                const p = proxy as unknown as {
+                  on(event: 'proxyReq', handler: (proxyReq: unknown, req: { method?: string; url?: string; _startTime?: number }) => void): void
+                  on(event: 'proxyRes', handler: (proxyRes: { statusCode?: number }, req: { method?: string; url?: string; _startTime?: number }) => void): void
+                  on(event: 'error', handler: (err: unknown, req?: { method?: string; url?: string }) => void): void
+                }
+                p.on('proxyReq', (_proxyReq: unknown, req: { method?: string; url?: string; _startTime?: number }) => {
+                  req._startTime = Date.now()
                   const method = (req.method || 'GET').toUpperCase()
                   const url = req.url || ''
                   write(`[proxy] → ${method} ${url}`)
                 })
-                p.on('proxyRes', (proxyRes: any, req: any) => {
+                p.on('proxyRes', (proxyRes: { statusCode?: number }, req: { method?: string; url?: string; _startTime?: number }) => {
                   const method = (req.method || 'GET').toUpperCase()
                   const url = req.url || ''
                   const status = proxyRes.statusCode || 0
-                  const start = (req as any)._startTime as number | undefined
+                  const start = req._startTime
                   const ms = typeof start === 'number' ? (Date.now() - start) : 0
                   write(`[proxy] ← ${method} ${url} -> ${status} ${ms}ms`)
                 })
-                p.on('error', (err: any, req: any) => {
+                p.on('error', (err: unknown, req?: { method?: string; url?: string }) => {
                   const method = (req?.method || 'GET').toUpperCase()
                   const url = req?.url || ''
-                  write(`[proxy] ✖ ${method} ${url} -> ERROR ${String(err?.message || err)}`)
+                  const errorMessage = err instanceof Error ? err.message : String(err)
+                  write(`[proxy] ✖ ${method} ${url} -> ERROR ${errorMessage}`)
                 })
               }
             }

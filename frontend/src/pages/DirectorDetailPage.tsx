@@ -69,7 +69,7 @@ export default function DirectorDetailPage() {
           <div>
             <SectionTitle as="h2">Filmography ({movies.length})</SectionTitle>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {movies.map((movie: any) => (
+              {movies.map((movie: Movie) => (
                 <MovieCard key={movie.id} movie={movie} />
               ))}
             </div>

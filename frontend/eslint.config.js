@@ -20,9 +20,7 @@ export default defineConfig([
       globals: globals.browser,
     },
     rules: {
-      'no-console': ['error', { allow: [],
-        // logger.ts is the only allowed place to use console
-      }],
+      'no-console': 'error',
     },
     linterOptions: {
       reportUnusedDisableDirectives: true,
@@ -30,6 +28,12 @@ export default defineConfig([
   },
   {
     files: ['src/services/logger.ts'],
+    rules: {
+      'no-console': 'off',
+    },
+  },
+  {
+    files: ['vite.config.ts'],
     rules: {
       'no-console': 'off',
     },

@@ -2,7 +2,7 @@ import type { Movie, MovieDetail, Actor, Director, Genre } from '../types'
 import { logger } from './logger'
 
 // Resolve API base URL from environment for production; empty string keeps relative paths for dev proxy
-const API_BASE_URL = ((import.meta as any)?.env?.VITE_API_BASE_URL ?? '').replace(/\/$/, '')
+const API_BASE_URL = ((import.meta as unknown as { env?: { VITE_API_BASE_URL?: string } })?.env?.VITE_API_BASE_URL ?? '').replace(/\/$/, '')
 
 type QueryParams = Record<string, string | number | boolean | undefined | null>
 
@@ -119,7 +119,7 @@ async function fetchJSON<T>(url: string, init?: RequestInit & { timeoutMs?: numb
     }
   }
 
-  let response = await doFetch as T
+  const response = await doFetch as T
   return response
 }
 
