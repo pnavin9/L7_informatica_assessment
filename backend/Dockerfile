@@ -26,6 +26,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Copy application code and tests
 COPY ./app /code/app
 COPY ./tests /code/tests
+COPY ./pyproject.toml
 
 # Create directory for SQLite database
 RUN mkdir -p /code/data
