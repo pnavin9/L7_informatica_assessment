@@ -8,6 +8,8 @@ Full‑stack Movie Explorer with FastAPI (Python) + React (Vite + TypeScript). B
 - Backend Image: https://github.com/pnavin9/L7_informatica_assessment/pkgs/container/l7-informatica-assessment
 - Frontend Image: https://github.com/pnavin9/L7_informatica_assessment/pkgs/container/l7-informatica-frontend
 
+Link to demo video https://drive.google.com/file/d/1gvrSi46Kajgj3h6hN_Q01iK-ZDr3ZVMz/view?usp=sharing
+
 ## What’s implemented (spec coverage)
 - Core entities: Movies, Actors, Directors, Genres (+ Ratings)
 - Relations: many‑to‑many Movies↔Genres, many‑to‑many Movies↔Actors, one Movie→Director
